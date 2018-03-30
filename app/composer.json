@@ -1,5 +1,16 @@
 {
+  "name": "devgiants/filesystem-gpio",
+  "type": "library",
+  "description": "Generic library highly customizable for handling GPIO via Linux filesystem",
+  "keywords": ["docker", "php", "cli", "gpio", "filesystem"],
+  "homepage": "https://github.com/devgiants/filesystem-gpio",
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Nicolas BONNIOT",
+      "email": "nicolas@devgiants.fr"
+    }
+  ],
   "require": {
     "symfony/console": "^3.2",
     "symfony/yaml": "^3.2",
@@ -8,7 +19,8 @@
     "monolog/monolog": "^1.23",
     "symfony/finder": "^3.4",
     "symfony/dotenv": "^3.4",
-    "symfony/filesystem": "^3.4"
+    "symfony/filesystem": "^3.4",
+    "pimple/pimple": "~3.0"
   },
   "autoload": {
     "psr-4": {
