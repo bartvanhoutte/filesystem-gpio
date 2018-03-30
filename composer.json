@@ -2,7 +2,7 @@
   "name": "devgiants/filesystem-gpio",
   "type": "library",
   "description": "Generic library highly customizable for handling GPIO via Linux filesystem",
-  "keywords": ["docker", "php", "cli", "gpio", "filesystem"],
+  "keywords": ["php", "gpio", "filesystem"],
   "homepage": "https://github.com/devgiants/filesystem-gpio",
   "license": "MIT",
   "authors": [
@@ -12,6 +12,7 @@
     }
   ],
   "require": {
+    "php": "^7.1",
     "monolog/monolog": "^1.23",
     "symfony/finder": "^3.4",
     "symfony/filesystem": "^3.4"
