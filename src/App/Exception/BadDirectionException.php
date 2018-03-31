@@ -8,9 +8,6 @@
 
 namespace App\Exception;
 
-
-use Symfony\Component\Config\Definition\Exception\Exception;
-
-class BadDirectionException extends Exception {
+class BadDirectionException extends \Exception {
 
 }

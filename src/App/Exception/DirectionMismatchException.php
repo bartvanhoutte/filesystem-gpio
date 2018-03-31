@@ -9,8 +9,6 @@
 namespace App\Exception;
 
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-
-class DirectionMismatchException extends Exception {
+class DirectionMismatchException extends \Exception {
 
 }
