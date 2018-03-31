@@ -6,7 +6,7 @@
  * Time: 17:27
  */
 
-namespace App\Model;
+namespace App\Model\GPIO;
 
 
 final class LogicalValues {

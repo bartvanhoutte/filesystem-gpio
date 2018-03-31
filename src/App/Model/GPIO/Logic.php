@@ -6,7 +6,7 @@
  * Time: 17:07
  */
 
-namespace App\Model;
+namespace App\Model\GPIO;
 
 
 final class Logic {

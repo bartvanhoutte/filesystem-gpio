@@ -6,7 +6,7 @@
  * Time: 16:36
  */
 
-namespace App\Model;
+namespace App\Model\GPIO;
 
 
 final class Directions {
