@@ -21,14 +21,14 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	const ROOT_FILESYSTEM = '/sys/class/gpio/';
 
-	const EXPORT = 'export/';
-	const UNEXPORT = 'unexport/';
+	const EXPORT = 'export';
+	const UNEXPORT = 'unexport';
 
-	const DIRECTION = 'direction/';
+	const DIRECTION = 'direction';
 
 	const GPIO = 'gpio';
 	
-	const VALUE = 'value/';
+	const VALUE = 'value';
 
 	/**
 	 * @var int $linuxNumber the GPIO number given by linux
@@ -94,10 +94,13 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws ExportException
 	 */
 	protected function export(): void {
-		file_put_contents(
-			rtrim(static::ROOT_FILESYSTEM . static::EXPORT, '/'),
-			"{$this->linuxNumber}"
-		);
+
+		if(!file_exists(static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber)) {
+			file_put_contents(
+				static::ROOT_FILESYSTEM . static::EXPORT,
+				"{$this->linuxNumber}"
+			);
+		}
 
 		// Check
 		if(!file_exists(static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber)) {

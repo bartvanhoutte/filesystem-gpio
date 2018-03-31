@@ -52,7 +52,7 @@ class GPO extends GPIO {
 	 */
 	public function write( $value ): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . GPIO::VALUE,
+			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE,
 					(bool) $value
 		);
 	}
