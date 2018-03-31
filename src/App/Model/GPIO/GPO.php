@@ -29,6 +29,10 @@ class GPO extends GPIO {
 		$gpo = new GPO($linuxNumber, $logic);
 		// Export
 		$gpo->export();
+
+		// Set direction
+		$gpo->setDirection();
+
 		return $gpo;
 	}
 
@@ -37,7 +41,7 @@ class GPO extends GPIO {
 	 */
 	protected function setDirection(): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::EXPORT . GPIO::DIRECTION,
+			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
 			Directions::OUT
 		);
 	}
@@ -48,7 +52,7 @@ class GPO extends GPIO {
 	 */
 	public function write( $value ): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber,
+			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . GPIO::VALUE,
 					(bool) $value
 		);
 	}

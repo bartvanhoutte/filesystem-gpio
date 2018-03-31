@@ -26,7 +26,7 @@ abstract class GPIO implements GPIOInterface {
 
 	const DIRECTION = 'direction/';
 
-	const GPIO = 'gpio/';
+	const GPIO = 'gpio';
 	
 	const VALUE = 'value/';
 
@@ -95,7 +95,7 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	protected function export(): void {
 		file_put_contents(
-			static::ROOT_FILESYSTEM . static::EXPORT,
+			rtrim(static::ROOT_FILESYSTEM . static::EXPORT, '/'),
 			"{$this->linuxNumber}"
 		);
 
