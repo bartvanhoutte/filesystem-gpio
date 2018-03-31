@@ -8,10 +8,8 @@
 
 namespace App\Model\GPIO;
 
-use App\Exception\DirectionMismatchException;
 use App\Exception\BadLogicException;
 use App\Exception\ExportException;
-use App\Model\GPIO\GPI;
 
 class GPO extends GPIO {
 
@@ -27,11 +25,12 @@ class GPO extends GPIO {
 	public static function register( int $linuxNumber, string $logic ): GPO {
 		GPIO::checkLogic($logic);
 		$gpo = new GPO($linuxNumber, $logic);
-		// Export
-		$gpo->export();
 
-		// Set direction
+
+		// Features
+		$gpo->export();
 		$gpo->setDirection();
+		$gpo->setLogic($logic);
 
 		return $gpo;
 	}
@@ -45,7 +44,6 @@ class GPO extends GPIO {
 			Directions::OUT
 		);
 	}
-
 
 	/**
 	 * @param $value

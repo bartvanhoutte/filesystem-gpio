@@ -25,10 +25,9 @@ abstract class GPIO implements GPIOInterface {
 	const UNEXPORT = 'unexport';
 
 	const DIRECTION = 'direction';
-
 	const GPIO = 'gpio';
-	
 	const VALUE = 'value';
+	const ACTIVE_LOW = 'active_low';
 
 	/**
 	 * @var int $linuxNumber the GPIO number given by linux
@@ -89,6 +88,17 @@ abstract class GPIO implements GPIOInterface {
 	 * @return void
 	 */
 	abstract protected function setDirection(): void;
+
+	/**
+	 * Set logic for HIGH level
+	 * @param string $logic
+	 */
+	protected function setLogic( string $logic): void {
+		file_put_contents(
+			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::ACTIVE_LOW,
+			$logic
+		);
+	}
 
 	/**
 	 * @throws ExportException
