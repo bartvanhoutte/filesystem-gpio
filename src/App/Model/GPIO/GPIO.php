@@ -96,7 +96,7 @@ abstract class GPIO implements GPIOInterface {
 	protected function setLogic( string $logic): void {
 		file_put_contents(
 			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::ACTIVE_LOW,
-			$logic
+			GPIO::ACTIVE_LOW === $logic ? 1 : 0
 		);
 	}
 
