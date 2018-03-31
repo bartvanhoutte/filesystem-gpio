@@ -9,7 +9,8 @@
 namespace App\Model\Board;
 
 
-use App\Model\GPIO;
+use App\Model\GPIO\GPI;
+use App\Model\GPIO\GPO;
 use App\Exception\BadDirectionException;
 use App\Exception\BadLogicException;
 
@@ -31,23 +32,34 @@ class Board {
 
 	/**
 	 * @param int $linuxNumber
-	 * @param string $direction
 	 * @param string $logic
 	 *
-	 * @return GPIO
-	 * @throws BadDirectionException
-	 * @throws BadLogicException
+	 * @return \App\Model\GPIO\GPI
+	 * @throws \App\Exception\BadLogicException
+	 * @throws \App\Exception\ExportException
 	 * @throws \ReflectionException
 	 */
 	public function registerGPI( int $linuxNumber, string $logic ) {
-//		return GPIO::register($linuxNumber, Dire, $logic);
+		return GPI::register($linuxNumber, $logic);
 	}
 
+	/**
+	 * @param int $linuxNumber
+	 * @param string $logic
+	 *
+	 * @return \App\Model\GPIO\GPO
+	 * @throws \App\Exception\BadLogicException
+	 * @throws \App\Exception\ExportException
+	 * @throws \ReflectionException
+	 */
 	public function registerGPO( int $linuxNumber, string $logic ) {
-
+		return GPO::register($linuxNumber, $logic);
 	}
 
-	public function deregisterGPIO( GPIO $gpio ) {
-		$gpio->deregister();
-	}
+//	/**
+//	 * @param \App\Model\Board\GPIO $gpio
+//	 */
+//	public function deregisterGPIO( GPIO $gpio ) {
+//		$gpio->deregister();
+//	}
 }
