@@ -9,13 +9,13 @@
 namespace App\Model\GPIO;
 
 
-use App\Exception\BadDirectionException;
 use App\Exception\BadLogicException;
-use App\Exception\DirectionMismatchException;
 use App\Exception\ExportException;
+use Evenement\EventEmitterTrait;
 
 abstract class GPIO implements GPIOInterface {
 
+	use EventEmitterTrait;
 	/**
 	 * Root filesystem to use for handling GPIO
 	 */
