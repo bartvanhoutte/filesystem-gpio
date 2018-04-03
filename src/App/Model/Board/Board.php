@@ -10,11 +10,26 @@ namespace App\Model\Board;
 
 
 use App\Model\GPIO\GPI;
+use App\Model\GPIO\GPIO;
 use App\Model\GPIO\GPO;
-use App\Exception\BadDirectionException;
-use App\Exception\BadLogicException;
+use React\EventLoop\Factory;
 
 class Board {
+
+	/**
+	 * @var array[GPI]
+	 */
+	protected $gpis;
+
+	/**
+	 * @var array[GPO]
+	 */
+	protected $gpos;
+
+	/**
+	 * @var \React\EventLoop\LoopInterface
+	 */
+	protected $loop;
 
 	/**
 	 * Board constructor.
@@ -27,7 +42,8 @@ class Board {
 	 *
 	 */
 	public static function create() {
-		return new static();
+		$board = new static();
+		$board->loop = Factory::create();
 	}
 
 	/**
@@ -40,7 +56,9 @@ class Board {
 	 * @throws \ReflectionException
 	 */
 	public function registerGPI( int $linuxNumber, string $logic ) {
-		return GPI::register($linuxNumber, $logic);
+		$gpi = GPI::register($linuxNumber, $logic);
+		$this->gpis[] = $gpi;
+		return $gpi;
 	}
 
 	/**
@@ -53,7 +71,18 @@ class Board {
 	 * @throws \ReflectionException
 	 */
 	public function registerGPO( int $linuxNumber, string $logic ) {
-		return GPO::register($linuxNumber, $logic);
+		$gpo =  GPO::register($linuxNumber, $logic);
+		$this->gpos[] = $gpo;
+		return $gpo;
+	}
+
+	/**
+	 *
+	 */
+	public function monitor() {
+		array_map(function(GPIO $gpio){
+			$gpio->monitor($this->loop);
+		}, array_merge($this->gpis, $this->gpos));
 	}
 
 //	/**

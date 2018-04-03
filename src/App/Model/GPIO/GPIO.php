@@ -12,6 +12,8 @@ namespace App\Model\GPIO;
 use App\Exception\BadLogicException;
 use App\Exception\ExportException;
 use Evenement\EventEmitterTrait;
+use React\EventLoop\LoopInterface;
+use ReactFilesystemMonitor\INotifyProcessMonitor;
 
 abstract class GPIO implements GPIOInterface {
 
@@ -45,6 +47,16 @@ abstract class GPIO implements GPIOInterface {
 	protected $logic;
 
 	/**
+	 * @var int
+	 */
+	protected $value;
+
+	/**
+	 * @var INotifyProcessMonitor
+	 */
+	protected $monitor;
+
+	/**
 	 * @var boolean $isExported
 	 */
 	protected $isExported = FALSE;
@@ -60,6 +72,17 @@ abstract class GPIO implements GPIOInterface {
 		$this->linuxNumber = $linuxNumber;
 		$this->direction   = $direction;
 		$this->logic       = $logic;
+	}
+
+	/**
+	 * @param \React\EventLoop\LoopInterface $loop
+	 */
+	public function monitor(LoopInterface $loop) {
+		$this->monitor = new INotifyProcessMonitor(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, ['modify']);
+		$this->monitor->on('all', function ($path, $event) {
+			echo file_get_contents($path);
+		});
+		$this->monitor->start($loop);
 	}
 
 	/**
@@ -104,7 +127,7 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws ExportException
 	 */
 	protected function export(): void {
-
+		// TODO review like PHPi
 		if(!file_exists(static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber)) {
 			file_put_contents(
 				static::ROOT_FILESYSTEM . static::EXPORT,

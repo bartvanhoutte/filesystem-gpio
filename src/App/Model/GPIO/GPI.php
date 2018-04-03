@@ -28,6 +28,7 @@ class GPI extends GPIO {
 		$gpi = new GPI($linuxNumber, $logic);
 		// Export
 		$gpi->export();
+
 		return $gpi;
 	}
 

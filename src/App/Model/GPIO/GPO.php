@@ -32,6 +32,8 @@ class GPO extends GPIO {
 		$gpo->setDirection();
 		$gpo->setLogic($logic);
 
+		parent::register($linuxNumber, $logic);
+
 		return $gpo;
 	}
 
