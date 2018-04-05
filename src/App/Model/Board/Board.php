@@ -35,15 +35,19 @@ class Board {
 	 * Board constructor.
 	 */
 	private function __construct() {
-
+		$this->gpis = [];
+		$this->gpos = [];
 	}
 
+
 	/**
-	 *
+	 * @return static
 	 */
-	public static function create() {
-		$board = new static();
+	public static function create(): Board {
+		$board       = new static();
 		$board->loop = Factory::create();
+
+		return $board;
 	}
 
 	/**
@@ -56,8 +60,9 @@ class Board {
 	 * @throws \ReflectionException
 	 */
 	public function registerGPI( int $linuxNumber, string $logic ) {
-		$gpi = GPI::register($linuxNumber, $logic);
+		$gpi          = GPI::register( $linuxNumber, $logic );
 		$this->gpis[] = $gpi;
+
 		return $gpi;
 	}
 
@@ -71,18 +76,40 @@ class Board {
 	 * @throws \ReflectionException
 	 */
 	public function registerGPO( int $linuxNumber, string $logic ) {
-		$gpo =  GPO::register($linuxNumber, $logic);
+		$gpo          = GPO::register( $linuxNumber, $logic );
 		$this->gpos[] = $gpo;
+
 		return $gpo;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getGpis(): array {
+		return $this->gpis;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getGpos(): array {
+		return $this->gpos;
+	}
+
+	/**
+	 * @return \React\EventLoop\LoopInterface
+	 */
+	public function getLoop(): \React\EventLoop\LoopInterface {
+		return $this->loop;
 	}
 
 	/**
 	 *
 	 */
 	public function monitor() {
-		array_map(function(GPIO $gpio){
-			$gpio->monitor($this->loop);
-		}, array_merge($this->gpis, $this->gpos));
+		array_map( function ( GPIO $gpio ) {
+			$gpio->monitor( $this->loop );
+		}, array_merge( $this->gpis, $this->gpos ) );
 	}
 
 //	/**

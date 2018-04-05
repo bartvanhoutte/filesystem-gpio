@@ -32,8 +32,6 @@ class GPO extends GPIO {
 		$gpo->setDirection();
 		$gpo->setLogic($logic);
 
-		parent::register($linuxNumber, $logic);
-
 		return $gpo;
 	}
 
@@ -51,9 +49,12 @@ class GPO extends GPIO {
 	 * @param $value
 	 */
 	public function write( $value ): void {
+		$value = boolval($value) ? 1 : 0;
 		file_put_contents(
 			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE,
-					boolval($value) ? 1 : 0
+					$value
 		);
+		$this->value = $value;
+		$this->emit(GPIO::VALUE_CHANGED_EVENT, ['gpio' => $this]);
 	}
 }

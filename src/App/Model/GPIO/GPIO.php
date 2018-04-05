@@ -31,6 +31,8 @@ abstract class GPIO implements GPIOInterface {
 	const VALUE = 'value';
 	const ACTIVE_LOW = 'active_low';
 
+	const VALUE_CHANGED_EVENT = 'value_changed_event';
+
 	/**
 	 * @var int $linuxNumber the GPIO number given by linux
 	 */
