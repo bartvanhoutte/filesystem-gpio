@@ -26,13 +26,26 @@ class GPO extends GPIO {
 		GPIO::checkLogic($logic);
 		$gpo = new GPO($linuxNumber, $logic);
 
-
 		// Features
 		$gpo->export();
 		$gpo->setDirection();
 		$gpo->setLogic($logic);
 
 		return $gpo;
+	}
+
+	/**
+	 * GPO constructor.
+	 *
+	 * @param int $linuxNumber
+	 * @param string $direction
+	 * @param string $logic
+	 */
+	protected function __construct( int $linuxNumber, string $direction, string $logic = Logic::ACTIVE_HIGH ) {
+		parent::__construct( $linuxNumber, $direction, $logic );
+
+		// Open RW
+		$this->fileHandler = fopen(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $linuxNumber . '/' . GPIO::VALUE, 'r+');
 	}
 
 	/**
@@ -50,11 +63,7 @@ class GPO extends GPIO {
 	 */
 	public function write( $value ): void {
 		$value = boolval($value) ? 1 : 0;
-		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE,
-					$value
-		);
+		fwrite($this->fileHandler, "$value", 1);
 		$this->value = $value;
-		$this->emit(GPIO::VALUE_CHANGED_EVENT, ['gpio' => $this]);
 	}
 }

@@ -49,6 +49,11 @@ abstract class GPIO implements GPIOInterface {
 	protected $logic;
 
 	/**
+	 * @var resource
+	 */
+	protected $fileHandler;
+
+	/**
 	 * @var int
 	 */
 	protected $value;
@@ -82,7 +87,7 @@ abstract class GPIO implements GPIOInterface {
 	public function monitor(LoopInterface $loop) {
 		$this->monitor = new INotifyProcessMonitor(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, ['modify']);
 		$this->monitor->on('all', function ($path, $event) {
-			echo file_get_contents($path);
+			$this->emit(GPIO::VALUE_CHANGED_EVENT, [$this]);
 		});
 		$this->monitor->start($loop);
 	}
@@ -91,7 +96,7 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws \Exception
 	 */
 	public function deregister(): void {
-		throw new \Exception( 'To implement' );
+		fclose($this->fileHandler);
 	}
 
 	/**
