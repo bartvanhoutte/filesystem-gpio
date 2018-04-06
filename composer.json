@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": "^7.0",
-    "calcinai/rubberneck": "^0.1.1"
+    "calcinai/rubberneck": "dev-master"
   },
   "autoload": {
     "psr-4": {
