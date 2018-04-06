@@ -43,9 +43,16 @@ class GPO extends GPIO {
 	 */
 	protected function __construct( int $linuxNumber, string $direction, string $logic = Logic::ACTIVE_HIGH ) {
 		parent::__construct( $linuxNumber, $direction, $logic );
+	}
 
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function export(): void {
+		parent::export();
 		// Open RW
-		$this->fileHandler = fopen(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $linuxNumber . '/' . GPIO::VALUE, 'r+');
+		$this->fileHandler = fopen(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, 'r+');
 	}
 
 	/**
