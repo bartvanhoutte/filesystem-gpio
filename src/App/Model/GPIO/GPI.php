@@ -17,35 +17,24 @@ class GPI extends GPIO {
 	/**
 	 * @param int $linuxNumber
 	 * @param string $logic
+	 * @param string $edge
 	 *
 	 * @return GPI
 	 * @throws BadLogicException
 	 * @throws \ReflectionException
 	 * @throws ExportException
 	 */
-	public static function register( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH): GPI {
+	public static function register( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH, string $edge = Edge::BOTH): GPI {
 		GPIO::checkLogic($logic);
 		$gpi = new GPI($linuxNumber, $logic);
-		// Export
+
+
 		$gpi->export();
 		$gpi->setDirection();
+		$gpi->setEdge($edge);
 		$gpi->setLogic($logic);
 
 		return $gpi;
-	}
-
-	/**
-	 * GPI constructor.
-	 *
-	 * @param int $linuxNumber
-	 * @param string $direction
-	 * @param string $logic
-	 */
-	protected function __construct( int $linuxNumber, string $direction, string $logic = Logic::ACTIVE_HIGH ) {
-		parent::__construct( $linuxNumber, $direction, $logic );
-
-		// Open R
-		$this->fileHandler = fopen(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $linuxNumber . '/' . GPIO::VALUE, 'r');
 	}
 
 	/**
@@ -55,6 +44,16 @@ class GPI extends GPIO {
 		file_put_contents(
 			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
 			Directions::IN
+		);
+	}
+
+	/**
+	 * @param string $edge
+	 */
+	protected function setEdge(string $edge): void {
+		file_put_contents(
+			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::EDGE,
+			$edge
 		);
 	}
 
