@@ -28,6 +28,8 @@ class GPI extends GPIO {
 		$gpi = new GPI($linuxNumber, $logic);
 		// Export
 		$gpi->export();
+		$gpi->setDirection();
+		$gpi->setLogic($logic);
 
 		return $gpi;
 	}
@@ -61,10 +63,6 @@ class GPI extends GPIO {
 	 * @throws DirectionMismatchException
 	 */
 	public function read(): bool {
-		//		if ( Directions::IN !== $this->direction ) {
-		//			throw new DirectionMismatchException( "This GPIO is not set as " . Directions::IN . ". You can't read anything" );
-		//		}
-		//
-		//		return FALSE;
+		return (bool)file_get_contents(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE);
 	}
 }

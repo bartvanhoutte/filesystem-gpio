@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": "^7.0",
-    "tsufeki/react-filesystem-monitor": "^0.3.0"
+    "calcinai/rubberneck": "^0.1.1"
   },
   "autoload": {
     "psr-4": {

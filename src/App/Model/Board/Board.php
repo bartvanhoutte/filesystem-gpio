@@ -13,6 +13,7 @@ use App\Model\GPIO\GPI;
 use App\Model\GPIO\GPIO;
 use App\Model\GPIO\GPO;
 use App\Model\GPIO\Logic;
+use Calcinai\Rubberneck\Observer;
 use React\EventLoop\Factory;
 
 class Board {
@@ -107,10 +108,14 @@ class Board {
 	/**
 	 *
 	 */
-	public function monitor() {
-		array_map( function ( GPIO $gpio ) {
-			$gpio->monitor( $this->loop );
-		}, array_merge( $this->gpis, $this->gpos ) );
+	public function watch() {
+		$observer = new Observer($this->loop);
+		$observer->on(Observer::EVENT_MODIFY, [$this, 'eventDetect']);
+		$observer->watch(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . '*/' . GPIO::VALUE);
+	}
+
+	protected function eventDetect($file) {
+		echo "change on $file";
 	}
 
 //	/**

@@ -82,16 +82,16 @@ abstract class GPIO implements GPIOInterface {
 		$this->logic       = $logic;
 	}
 
-	/**
-	 * @param \React\EventLoop\LoopInterface $loop
-	 */
-	public function monitor(LoopInterface $loop) {
-		$this->monitor = new INotifyProcessMonitor(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, ['modify']);
-		$this->monitor->on('all', function ($path, $event) {
-			$this->emit(GPIO::AFTER_VALUE_CHANGE_EVENT, [$this]);
-		});
-		$this->monitor->start($loop);
-	}
+//	/**
+//	 * @param \React\EventLoop\LoopInterface $loop
+//	 */
+//	public function monitor(LoopInterface $loop) {
+//		$this->monitor = new INotifyProcessMonitor(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, ['modify']);
+//		$this->monitor->on('all', function ($path, $event) {
+//			$this->emit(GPIO::AFTER_VALUE_CHANGE_EVENT, [$this]);
+//		});
+//		$this->monitor->start($loop);
+//	}
 
 	/**
 	 * @throws \Exception
