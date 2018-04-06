@@ -12,6 +12,7 @@ namespace App\Model\Board;
 use App\Model\GPIO\GPI;
 use App\Model\GPIO\GPIO;
 use App\Model\GPIO\GPO;
+use App\Model\GPIO\Logic;
 use React\EventLoop\Factory;
 
 class Board {
@@ -59,7 +60,7 @@ class Board {
 	 * @throws \App\Exception\ExportException
 	 * @throws \ReflectionException
 	 */
-	public function registerGPI( int $linuxNumber, string $logic ) {
+	public function registerGPI( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
 		$gpi          = GPI::register( $linuxNumber, $logic );
 		$this->gpis[] = $gpi;
 
@@ -75,7 +76,7 @@ class Board {
 	 * @throws \App\Exception\ExportException
 	 * @throws \ReflectionException
 	 */
-	public function registerGPO( int $linuxNumber, string $logic ) {
+	public function registerGPO( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
 		$gpo          = GPO::register( $linuxNumber, $logic );
 		$this->gpos[] = $gpo;
 

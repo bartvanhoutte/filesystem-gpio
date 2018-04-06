@@ -22,7 +22,7 @@ class GPO extends GPIO {
 	 * @throws ExportException
 	 * @throws \ReflectionException
 	 */
-	public static function register( int $linuxNumber, string $logic ): GPO {
+	public static function register( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ): GPO {
 		GPIO::checkLogic($logic);
 		$gpo = new GPO($linuxNumber, $logic);
 
@@ -58,13 +58,13 @@ class GPO extends GPIO {
 		);
 	}
 
-	/**
-	 * @param $value
-	 */
-	public function write( $value ): void {
-		$this->emit(GPIO::BEFORE_VALUE_CHANGE_EVENT, [$this]);
-		$value = boolval($value) ? 1 : 0;
-		fwrite($this->fileHandler, "$value", 1);
-		$this->value = $value;
-	}
+//	/**
+//	 * @param $value
+//	 */
+//	public function write( $value ): void {
+//		$this->emit(GPIO::BEFORE_VALUE_CHANGE_EVENT, [$this]);
+//		$value = boolval($value) ? 1 : 0;
+//		fwrite($this->fileHandler, "$value", 1);
+//		$this->value = $value;
+//	}
 }

@@ -23,7 +23,7 @@ class GPI extends GPIO {
 	 * @throws \ReflectionException
 	 * @throws ExportException
 	 */
-	public static function register( int $linuxNumber, string $logic ): GPI {
+	public static function register( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH): GPI {
 		GPIO::checkLogic($logic);
 		$gpi = new GPI($linuxNumber, $logic);
 		// Export
@@ -33,11 +33,25 @@ class GPI extends GPIO {
 	}
 
 	/**
+	 * GPI constructor.
+	 *
+	 * @param int $linuxNumber
+	 * @param string $direction
+	 * @param string $logic
+	 */
+	protected function __construct( int $linuxNumber, string $direction, string $logic = Logic::ACTIVE_HIGH ) {
+		parent::__construct( $linuxNumber, $direction, $logic );
+
+		// Open R
+		$this->fileHandler = fopen(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $linuxNumber . '/' . GPIO::VALUE, 'r');
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	protected function setDirection(): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::EXPORT . GPIO::DIRECTION,
+			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
 			Directions::IN
 		);
 	}
