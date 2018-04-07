@@ -87,7 +87,7 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws \Exception
 	 */
 	public function deregister(): void {
-		fclose( $this->fileHandler );
+
 	}
 
 	/**
@@ -151,6 +151,15 @@ abstract class GPIO implements GPIOInterface {
 			static::ROOT_FILESYSTEM . static::UNEXPORT,
 			"{$this->linuxNumber}"
 		);
+	}
+
+	/**
+	 *
+	 */
+	public function toggleState() {
+		$this->emit(GPIO::BEFORE_VALUE_CHANGE_EVENT);
+		$this->value = !$this->value;
+		$this->emit(GPIO::AFTER_VALUE_CHANGE_EVENT);
 	}
 
 	/**

@@ -19,6 +19,11 @@ use React\EventLoop\Factory;
 class Board {
 
 	/**
+	 * @var array[GPIO]
+	 */
+	protected $gpios;
+
+	/**
 	 * @var array[GPI]
 	 */
 	protected $gpis;
@@ -63,7 +68,8 @@ class Board {
 	 */
 	public function registerGPI( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
 		$gpi          = GPI::register( $linuxNumber, $logic );
-		$this->gpis[] = $gpi;
+		$this->gpis[$gpi->getLinuxNumber()] = $gpi;
+		$this->gpios[$gpi->getLinuxNumber()] = $gpi;
 
 		return $gpi;
 	}
@@ -79,7 +85,8 @@ class Board {
 	 */
 	public function registerGPO( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
 		$gpo          = GPO::register( $linuxNumber, $logic );
-		$this->gpos[] = $gpo;
+		$this->gpos[$gpo->getLinuxNumber()] = $gpo;
+		$this->gpios[$gpo->getLinuxNumber()] = $gpo;
 
 		return $gpo;
 	}
@@ -115,13 +122,21 @@ class Board {
 	}
 
 	public function eventDetect($file) {
-		echo "change on $file";
+		list($gpioNumber) = sscanf($file, GPIO::ROOT_FILESYSTEM . GPIO::GPIO . '/%i/');
+
+		// TODO add check on array key existence
+		$gpio = $this->gpios[$gpioNumber];
+
+		// TODO make checks on maximum speed regarding to what is done here : https://github.com/calcinai/phpi/blob/master/src/PHPi/Pin/EdgeDetector/Rubberneck.php#L65
+		$gpio->toggleState();
 	}
 
-//	/**
-//	 * @param \App\Model\Board\GPIO $gpio
-//	 */
-//	public function deregisterGPIO( GPIO $gpio ) {
-//		$gpio->deregister();
-//	}
+	/**
+	 * @param GPIO $gpio
+	 *
+	 * @throws \Exception
+	 */
+	public function deregisterGPIO( GPIO $gpio ) {
+		$gpio->deregister();
+	}
 }
