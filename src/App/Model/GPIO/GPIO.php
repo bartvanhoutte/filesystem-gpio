@@ -68,7 +68,7 @@ abstract class GPIO implements GPIOInterface {
 	/**
 	 * @var boolean $isExported
 	 */
-	protected $isExported = FALSE;
+	protected $isExported = false;
 
 	/**
 	 * GPIO constructor.
@@ -87,7 +87,7 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws \Exception
 	 */
 	public function deregister(): void {
-		fclose($this->fileHandler);
+		fclose( $this->fileHandler );
 	}
 
 	/**
@@ -112,9 +112,10 @@ abstract class GPIO implements GPIOInterface {
 
 	/**
 	 * Set logic for HIGH level
+	 *
 	 * @param string $logic
 	 */
-	protected function setLogic( string $logic): void {
+	protected function setLogic( string $logic ): void {
 		file_put_contents(
 			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::ACTIVE_LOW,
 			GPIO::ACTIVE_LOW === $logic ? 1 : 0
@@ -125,19 +126,31 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws ExportException
 	 */
 	protected function export(): void {
+
+		// Unexport first
+		$this->unexport();
+
 		// TODO review like PHPi
-		if(!file_exists(static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber)) {
-			file_put_contents(
-				static::ROOT_FILESYSTEM . static::EXPORT,
-				"{$this->linuxNumber}"
-			);
-		}
+		file_put_contents(
+			static::ROOT_FILESYSTEM . static::EXPORT,
+			"{$this->linuxNumber}"
+		);
 
 		// Check
-		if(!file_exists(static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber)) {
-			throw new ExportException("Problem with export. GPIO {$this->linuxNumber} not found");
+		if ( ! file_exists( static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber ) ) {
+			throw new ExportException( "Problem with export. GPIO {$this->linuxNumber} not found" );
 		}
 		$this->isExported = true;
+	}
+
+	/**
+	 *
+	 */
+	protected function unexport(): void {
+		file_put_contents(
+			static::ROOT_FILESYSTEM . static::UNEXPORT,
+			"{$this->linuxNumber}"
+		);
 	}
 
 	/**
@@ -146,8 +159,8 @@ abstract class GPIO implements GPIOInterface {
 	 * @throws BadLogicException
 	 * @throws \ReflectionException
 	 */
-	public static function checkLogic($logic): void {
-		$logicClass     = new \ReflectionClass( Logic::class );
+	public static function checkLogic( $logic ): void {
+		$logicClass = new \ReflectionClass( Logic::class );
 		// Check logic is valid
 		if ( ! ( in_array( $logic, $logicClass->getConstants() ) ) ) {
 			throw new BadLogicException( "Logic can only be : " . implode( ', ', $logicClass->getConstants() ) );
