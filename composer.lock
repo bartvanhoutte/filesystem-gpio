@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4ba610fada474bba3f5c6a0c3b8e9329",
-    "content-hash": "738f500eab08958d5dc66d015b7c23f1",
+    "hash": "039dfaa3cc0529c2b3499a5be509878c",
+    "content-hash": "7c418ad83cad4a65e63cc41c3a0a9ec4",
     "packages": [
         {
             "name": "calcinai/rubberneck",
-            "version": "v0.1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/calcinai/rubberneck.git",
-                "reference": "22cbcfd27c2c587f3e3611b18b79ecf6caba4fe7"
+                "reference": "3288e2faff75e417a77bb70092121a3a64c5eed3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/calcinai/rubberneck/zipball/22cbcfd27c2c587f3e3611b18b79ecf6caba4fe7",
-                "reference": "22cbcfd27c2c587f3e3611b18b79ecf6caba4fe7",
+                "url": "https://api.github.com/repos/calcinai/rubberneck/zipball/3288e2faff75e417a77bb70092121a3a64c5eed3",
+                "reference": "3288e2faff75e417a77bb70092121a3a64c5eed3",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 }
             ],
             "description": "Utility to monitor file system changes",
-            "time": "2016-02-06 01:54:39"
+            "time": "2016-06-20 18:04:09"
         },
         {
             "name": "evenement/evenement",
@@ -141,7 +141,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "calcinai/rubberneck": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

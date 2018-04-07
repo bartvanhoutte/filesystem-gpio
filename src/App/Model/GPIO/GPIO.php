@@ -11,6 +11,7 @@ namespace App\Model\GPIO;
 
 use App\Exception\BadLogicException;
 use App\Exception\ExportException;
+use Calcinai\Rubberneck\Observer;
 use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;
 use ReactFilesystemMonitor\INotifyProcessMonitor;
@@ -18,21 +19,28 @@ use ReactFilesystemMonitor\INotifyProcessMonitor;
 abstract class GPIO implements GPIOInterface {
 
 	use EventEmitterTrait;
+
 	/**
 	 * Root filesystem to use for handling GPIO
 	 */
 	const ROOT_FILESYSTEM = '/sys/class/gpio/';
 
 	const EXPORT = 'export';
+
 	const UNEXPORT = 'unexport';
 
 	const DIRECTION = 'direction';
+
 	const EDGE = 'edge';
+
 	const GPIO = 'gpio';
+
 	const VALUE = 'value';
+
 	const ACTIVE_LOW = 'active_low';
 
 	const BEFORE_VALUE_CHANGE_EVENT = 'before_value_change_event';
+
 	const AFTER_VALUE_CHANGE_EVENT = 'after_value_change_event';
 
 	/**
@@ -68,7 +76,7 @@ abstract class GPIO implements GPIOInterface {
 	/**
 	 * @var boolean $isExported
 	 */
-	protected $isExported = false;
+	protected $isExported = FALSE;
 
 	/**
 	 * GPIO constructor.
@@ -106,6 +114,7 @@ abstract class GPIO implements GPIOInterface {
 
 	/**
 	 * Set direction for this GPIO
+	 *
 	 * @return void
 	 */
 	abstract protected function setDirection(): void;
@@ -123,6 +132,8 @@ abstract class GPIO implements GPIOInterface {
 	}
 
 	/**
+	 * Export GPIO to make it accessible in program userspace
+	 *
 	 * @throws ExportException
 	 */
 	protected function export(): void {
@@ -140,11 +151,11 @@ abstract class GPIO implements GPIOInterface {
 		if ( ! file_exists( static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber ) ) {
 			throw new ExportException( "Problem with export. GPIO {$this->linuxNumber} not found" );
 		}
-		$this->isExported = true;
+		$this->isExported = TRUE;
 	}
 
 	/**
-	 *
+	 * Unexport GPIO to remove it from userspace
 	 */
 	protected function unexport(): void {
 		file_put_contents(
@@ -153,13 +164,23 @@ abstract class GPIO implements GPIOInterface {
 		);
 	}
 
+
+	public function watch(LoopInterface $loop) {
+		$observer = new Observer($loop);
+		$observer->on(Observer::EVENT_MODIFY, [$this, 'onEventDetect']);
+		$observer->watch(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . "{$this->linuxNumber}/" . GPIO::VALUE);
+	}
+
+
+	abstract public function onEventDetect();
+
 	/**
 	 *
 	 */
 	public function toggleState() {
-		$this->emit(GPIO::BEFORE_VALUE_CHANGE_EVENT);
-		$this->value = !$this->value;
-		$this->emit(GPIO::AFTER_VALUE_CHANGE_EVENT);
+		$this->emit( GPIO::BEFORE_VALUE_CHANGE_EVENT );
+		$this->value = ! $this->value;
+		$this->emit( GPIO::AFTER_VALUE_CHANGE_EVENT );
 	}
 
 	/**

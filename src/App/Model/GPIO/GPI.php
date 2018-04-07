@@ -59,9 +59,17 @@ class GPI extends GPIO {
 
 	/**
 	 * @return bool
-	 * @throws DirectionMismatchException
 	 */
 	public function read(): bool {
-		return (bool)file_get_contents(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE);
+		return ($this->value = (bool)file_get_contents(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE));
+	}
+
+	/**
+	 *
+	 */
+	public function onEventDetect() {
+		// Read value
+		$this->read();
+		$this->emit(GPIO::AFTER_VALUE_CHANGE_EVENT);
 	}
 }

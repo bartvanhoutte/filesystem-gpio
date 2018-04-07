@@ -67,9 +67,8 @@ class Board {
 	 * @throws \ReflectionException
 	 */
 	public function registerGPI( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
-		$gpi          = GPI::register( $linuxNumber, $logic );
-		$this->gpis[$gpi->getLinuxNumber()] = $gpi;
-		$this->gpios[$gpi->getLinuxNumber()] = $gpi;
+		$gpi                                   = GPI::register( $linuxNumber, $logic );
+		$this->finalize($gpi);
 
 		return $gpi;
 	}
@@ -84,22 +83,44 @@ class Board {
 	 * @throws \ReflectionException
 	 */
 	public function registerGPO( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
-		$gpo          = GPO::register( $linuxNumber, $logic );
-		$this->gpos[$gpo->getLinuxNumber()] = $gpo;
-		$this->gpios[$gpo->getLinuxNumber()] = $gpo;
+		$gpo                                   = GPO::register( $linuxNumber, $logic );
+		$this->finalize($gpo);
 
 		return $gpo;
 	}
 
 	/**
-	 * @return array
+	 * @param \App\Model\GPIO\GPIO $gpio
+	 */
+	protected function finalize(GPIO $gpio) {
+		if($gpio instanceof GPI) {
+			$this->gpis[ $gpio->getLinuxNumber() ]  = $gpio;
+		} else {
+			$this->gpos[ $gpio->getLinuxNumber() ]  = $gpio;
+		}
+
+		$this->gpios[ $gpio->getLinuxNumber() ] = $gpio;
+
+		// Start watching
+		$gpio->watch($this->loop);
+	}
+
+	/**
+	 * @return array[GPIO]
+	 */
+	public function getGpios(): array {
+		return $this->gpios;
+	}
+
+	/**
+	 * @return array[GPI]
 	 */
 	public function getGpis(): array {
 		return $this->gpis;
 	}
 
 	/**
-	 * @return array
+	 * @return array[GPO]
 	 */
 	public function getGpos(): array {
 		return $this->gpos;
@@ -112,24 +133,6 @@ class Board {
 		return $this->loop;
 	}
 
-	/**
-	 *
-	 */
-	public function watch() {
-		$observer = new Observer($this->loop);
-		$observer->on(Observer::EVENT_MODIFY, [$this, 'eventDetect']);
-		$observer->watch(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . '*/' . GPIO::VALUE);
-	}
-
-	public function eventDetect($file) {
-		list($gpioNumber) = sscanf($file, GPIO::ROOT_FILESYSTEM . GPIO::GPIO . '/%i/');
-
-		// TODO add check on array key existence
-		$gpio = $this->gpios[$gpioNumber];
-
-		// TODO make checks on maximum speed regarding to what is done here : https://github.com/calcinai/phpi/blob/master/src/PHPi/Pin/EdgeDetector/Rubberneck.php#L65
-		$gpio->toggleState();
-	}
 
 	/**
 	 * @param GPIO $gpio
