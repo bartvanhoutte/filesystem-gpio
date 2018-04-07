@@ -114,7 +114,7 @@ class Board {
 		$observer->watch(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . '*/' . GPIO::VALUE);
 	}
 
-	protected function eventDetect($file) {
+	public function eventDetect($file) {
 		echo "change on $file";
 	}
 
