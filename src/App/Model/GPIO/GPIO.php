@@ -59,19 +59,9 @@ abstract class GPIO implements GPIOInterface {
 	protected $logic;
 
 	/**
-	 * @var resource
-	 */
-	protected $fileHandler;
-
-	/**
 	 * @var int
 	 */
 	protected $value;
-
-	/**
-	 * @var INotifyProcessMonitor
-	 */
-	protected $monitor;
 
 	/**
 	 * @var boolean $isExported
@@ -89,6 +79,20 @@ abstract class GPIO implements GPIOInterface {
 		$this->linuxNumber = $linuxNumber;
 		$this->direction   = $direction;
 		$this->logic       = $logic;
+	}
+
+	/**
+	 * @param $logic
+	 *
+	 * @throws BadLogicException
+	 * @throws \ReflectionException
+	 */
+	public static function checkLogic( $logic ): void {
+		$logicClass = new \ReflectionClass( Logic::class );
+		// Check logic is valid
+		if ( ! ( in_array( $logic, $logicClass->getConstants() ) ) ) {
+			throw new BadLogicException( "Logic can only be : " . implode( ', ', $logicClass->getConstants() ) );
+		}
 	}
 
 	/**
@@ -119,6 +123,19 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	abstract protected function setDirection(): void;
 
+	public function watch( LoopInterface $loop ) {
+		$observer = new Observer( $loop );
+		$observer->on( Observer::EVENT_MODIFY, [ $this, 'onEventDetect' ] );
+		$observer->watch( GPIO::ROOT_FILESYSTEM . GPIO::GPIO . "{$this->linuxNumber}/" . GPIO::VALUE );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLogic(): string {
+		return $this->logic;
+	}
+
 	/**
 	 * Set logic for HIGH level
 	 *
@@ -129,6 +146,31 @@ abstract class GPIO implements GPIOInterface {
 			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::ACTIVE_LOW,
 			GPIO::ACTIVE_LOW === $logic ? 1 : 0
 		);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getValue(): int {
+		return $this->value;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isExported(): bool {
+		return $this->isExported;
+	}
+
+	abstract public function onEventDetect();
+
+	/**
+	 *
+	 */
+	public function toggleState() {
+		$this->emit( GPIO::BEFORE_VALUE_CHANGE_EVENT );
+		$this->value = ! $this->value;
+		$this->emit( GPIO::AFTER_VALUE_CHANGE_EVENT );
 	}
 
 	/**
@@ -162,38 +204,5 @@ abstract class GPIO implements GPIOInterface {
 			static::ROOT_FILESYSTEM . static::UNEXPORT,
 			"{$this->linuxNumber}"
 		);
-	}
-
-
-	public function watch(LoopInterface $loop) {
-		$observer = new Observer($loop);
-		$observer->on(Observer::EVENT_MODIFY, [$this, 'onEventDetect']);
-		$observer->watch(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . "{$this->linuxNumber}/" . GPIO::VALUE);
-	}
-
-
-	abstract public function onEventDetect();
-
-	/**
-	 *
-	 */
-	public function toggleState() {
-		$this->emit( GPIO::BEFORE_VALUE_CHANGE_EVENT );
-		$this->value = ! $this->value;
-		$this->emit( GPIO::AFTER_VALUE_CHANGE_EVENT );
-	}
-
-	/**
-	 * @param $logic
-	 *
-	 * @throws BadLogicException
-	 * @throws \ReflectionException
-	 */
-	public static function checkLogic( $logic ): void {
-		$logicClass = new \ReflectionClass( Logic::class );
-		// Check logic is valid
-		if ( ! ( in_array( $logic, $logicClass->getConstants() ) ) ) {
-			throw new BadLogicException( "Logic can only be : " . implode( ', ', $logicClass->getConstants() ) );
-		}
 	}
 }

@@ -14,6 +14,11 @@ use App\Exception\ExportException;
 class GPO extends GPIO {
 
 	/**
+	 * @var resource
+	 */
+	protected $fileHandler;
+
+	/**
 	 * @param int $linuxNumber
 	 * @param string $logic
 	 *
