@@ -64,4 +64,13 @@ class GPI extends GPIO {
 		return ($this->value = (int)file_get_contents(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE));
 	}
 
+	/**
+	 *
+	 */
+	public function onEventDetect() {
+		// Read value
+		$this->read();
+		$this->emit(GPIO::AFTER_VALUE_CHANGE_EVENT);
+	}
+
 }
