@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "039dfaa3cc0529c2b3499a5be509878c",
-    "content-hash": "7c418ad83cad4a65e63cc41c3a0a9ec4",
+    "hash": "47b7a71bbf869020376cc9a5127b30b7",
+    "content-hash": "29dd26685b8752be6c128bd5ac2c66af",
     "packages": [
         {
-            "name": "calcinai/rubberneck",
+            "name": "devgiants/filesystem-notifications",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/calcinai/rubberneck.git",
-                "reference": "3288e2faff75e417a77bb70092121a3a64c5eed3"
+                "url": "https://github.com/devgiants/filesystem-notifications.git",
+                "reference": "bdfbfa6f5c3a7fb4f709f80977f93f98dcdf82e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/calcinai/rubberneck/zipball/3288e2faff75e417a77bb70092121a3a64c5eed3",
-                "reference": "3288e2faff75e417a77bb70092121a3a64c5eed3",
+                "url": "https://api.github.com/repos/devgiants/filesystem-notifications/zipball/bdfbfa6f5c3a7fb4f709f80977f93f98dcdf82e2",
+                "reference": "bdfbfa6f5c3a7fb4f709f80977f93f98dcdf82e2",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 }
             ],
             "description": "Utility to monitor file system changes",
-            "time": "2016-06-20 18:04:09"
+            "time": "2018-04-09 15:37:26"
         },
         {
             "name": "evenement/evenement",
@@ -142,7 +142,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "calcinai/rubberneck": 20
+        "devgiants/filesystem-notifications": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
