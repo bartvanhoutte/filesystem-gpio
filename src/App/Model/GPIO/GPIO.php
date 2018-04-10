@@ -63,10 +63,6 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	protected $value;
 
-	/**
-	 * @var boolean $isExported
-	 */
-	protected $isExported = FALSE;
 
 	/**
 	 * GPIO constructor.
@@ -155,23 +151,10 @@ abstract class GPIO implements GPIOInterface {
 		return $this->value;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isExported(): bool {
-		return $this->isExported;
-	}
 
 	abstract public function onEventDetect();
 
-	/**
-	 *
-	 */
-	public function toggleState() {
-		$this->emit( GPIO::BEFORE_VALUE_CHANGE_EVENT );
-		$this->value = ! $this->value;
-		$this->emit( GPIO::AFTER_VALUE_CHANGE_EVENT );
-	}
+
 
 	/**
 	 * Export GPIO to make it accessible in program userspace
@@ -204,5 +187,33 @@ abstract class GPIO implements GPIOInterface {
 			static::ROOT_FILESYSTEM . static::UNEXPORT,
 			"{$this->linuxNumber}"
 		);
+	}
+
+	/**
+	 * @return int
+	 */
+	protected function getHigh(): int {
+		return (($this->logic === static::ACTIVE_LOW) ? LogicalValues::LOW : LogicalValues::HIGH);
+	}
+
+	/**
+	 * @return int
+	 */
+	protected function getLow(): int {
+		return (($this->logic === static::ACTIVE_LOW) ? LogicalValues::HIGH : LogicalValues::LOW);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSet(): bool {
+		return ($this->value === $this->getHigh());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isReset(): bool {
+		return ($this->value === $this->getLow());
 	}
 }
