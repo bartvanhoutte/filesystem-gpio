@@ -6,7 +6,7 @@
  * Time: 16:36
  */
 
-namespace App\Model\GPIO;
+namespace Devgiants\FilesystemGPIO\Model\GPIO;
 
 
 final class Directions {

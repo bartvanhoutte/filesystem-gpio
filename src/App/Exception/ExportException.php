@@ -6,7 +6,7 @@
  * Time: 16:42
  */
 
-namespace App\Exception;
+namespace Devgiants\FilesystemGPIO\Exception;
 
 class ExportException extends \Exception {
 

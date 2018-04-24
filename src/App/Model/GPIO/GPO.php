@@ -6,10 +6,10 @@
  * Time: 15:35
  */
 
-namespace App\Model\GPIO;
+namespace Devgiants\FilesystemGPIO\Model\GPIO;
 
-use App\Exception\BadLogicException;
-use App\Exception\ExportException;
+use Devgiants\FilesystemGPIO\Exception\BadLogicException;
+use Devgiants\FilesystemGPIO\Exception\ExportException;
 
 class GPO extends GPIO {
 

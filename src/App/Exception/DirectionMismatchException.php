@@ -6,7 +6,7 @@
  * Time: 17:16
  */
 
-namespace App\Exception;
+namespace Devgiants\FilesystemGPIO\Exception;
 
 
 class DirectionMismatchException extends \Exception {

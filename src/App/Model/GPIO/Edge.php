@@ -6,7 +6,7 @@
  * Time: 17:49
  */
 
-namespace App\Model\GPIO;
+namespace Devgiants\FilesystemGPIO\Model\GPIO;
 
 
 class Edge {

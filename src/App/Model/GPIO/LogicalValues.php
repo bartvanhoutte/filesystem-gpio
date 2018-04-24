@@ -6,7 +6,7 @@
  * Time: 17:27
  */
 
-namespace App\Model\GPIO;
+namespace Devgiants\FilesystemGPIO\Model\GPIO;
 
 
 final class LogicalValues {

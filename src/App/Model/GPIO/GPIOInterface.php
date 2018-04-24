@@ -6,7 +6,7 @@
  * Time: 18:29
  */
 
-namespace App\Model\GPIO;
+namespace Devgiants\FilesystemGPIO\Model\GPIO;
 
 
 interface GPIOInterface {

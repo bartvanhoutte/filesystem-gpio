@@ -6,11 +6,11 @@
  * Time: 16:28
  */
 
-namespace App\Model\GPIO;
+namespace Devgiants\FilesystemGPIO\Model\GPIO;
 
 
-use App\Exception\BadLogicException;
-use App\Exception\ExportException;
+use Devgiants\FilesystemGPIO\Exception\BadLogicException;
+use Devgiants\FilesystemGPIO\Exception\ExportException;
 use Calcinai\Rubberneck\Observer;
 use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;

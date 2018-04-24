@@ -6,13 +6,13 @@
  * Time: 15:00
  */
 
-namespace App\Model\Board;
+namespace Devgiants\FilesystemGPIO\Model\Board;
 
 
-use App\Model\GPIO\GPI;
-use App\Model\GPIO\GPIO;
-use App\Model\GPIO\GPO;
-use App\Model\GPIO\Logic;
+use Devgiants\FilesystemGPIO\Model\GPIO\GPI;
+use Devgiants\FilesystemGPIO\Model\GPIO\GPIO;
+use Devgiants\FilesystemGPIO\Model\GPIO\GPO;
+use Devgiants\FilesystemGPIO\Model\GPIO\Logic;
 use Calcinai\Rubberneck\Observer;
 use React\EventLoop\Factory;
 
@@ -61,9 +61,9 @@ class Board {
 	 * @param int $linuxNumber
 	 * @param string $logic
 	 *
-	 * @return \App\Model\GPIO\GPI
-	 * @throws \App\Exception\BadLogicException
-	 * @throws \App\Exception\ExportException
+	 * @return \Devgiants\FilesystemGPIO\Model\GPIO\GPI
+	 * @throws \Devgiants\FilesystemGPIO\Exception\BadLogicException
+	 * @throws \Devgiants\FilesystemGPIO\Exception\ExportException
 	 * @throws \ReflectionException
 	 */
 	public function registerGPI( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
@@ -77,9 +77,9 @@ class Board {
 	 * @param int $linuxNumber
 	 * @param string $logic
 	 *
-	 * @return \App\Model\GPIO\GPO
-	 * @throws \App\Exception\BadLogicException
-	 * @throws \App\Exception\ExportException
+	 * @return \Devgiants\FilesystemGPIO\Model\GPIO\GPO
+	 * @throws \Devgiants\FilesystemGPIO\Exception\BadLogicException
+	 * @throws \Devgiants\FilesystemGPIO\Exception\ExportException
 	 * @throws \ReflectionException
 	 */
 	public function registerGPO( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
@@ -90,7 +90,7 @@ class Board {
 	}
 
 	/**
-	 * @param \App\Model\GPIO\GPIO $gpio
+	 * @param \Devgiants\FilesystemGPIO\Model\GPIO\GPIO $gpio
 	 */
 	protected function finalize(GPIO $gpio) {
 		if($gpio instanceof GPI) {
