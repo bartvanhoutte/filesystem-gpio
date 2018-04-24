@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Devgiants\\FilesystemGPIO": "src/App"
+      "Devgiants\\FilesystemGPIO\\": "src/App"
     }
   },
   "autoload-dev": {
