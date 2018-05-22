@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": "^7.0",
-    "devgiants/filesystem-notifications": "dev-master"
+    "devgiants/filesystem-notifications": "1.0.*"
   },
   "extra": {
     "branch-alias": {
