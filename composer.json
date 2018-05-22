@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": "^7.0",
-    "devgiants/filesystem-notifications": "dev-master as 1.0.x-dev"
+    "devgiants/filesystem-notifications": "0.0.2"
   },
   "autoload": {
     "psr-4": {
