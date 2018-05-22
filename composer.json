@@ -11,15 +11,9 @@
       "email": "nicolas@devgiants.fr"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/devgiants/filesystem-notifications"
-    }
-  ],
   "require": {
     "php": "^7.0",
-    "devgiants/filesystem-notifications": "dev-master#0.0.2"
+    "devgiants/filesystem-notifications": "0.0.4"
   },
   "autoload": {
     "psr-4": {
