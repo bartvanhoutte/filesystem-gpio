@@ -19,12 +19,7 @@
   ],
   "require": {
     "php": "^7.0",
-    "devgiants/filesystem-notifications": "1.0.*"
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
-    }
+    "devgiants/filesystem-notifications": "dev-master as 1.0.x-dev"
   },
   "autoload": {
     "psr-4": {
