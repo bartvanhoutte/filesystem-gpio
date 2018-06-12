@@ -1,4 +1,5 @@
 # Filesystem GPIO
+
 ## Description
 
 This PHP library allow you to handle GPIO access based on [Sysfs interface](https://www.kernel.org/doc/Documentation/gpio/sysfs.txt) found on Linux systems.
@@ -8,7 +9,7 @@ Under the hood, this is using [ReactPHP](https://reactphp.org/) and my fork from
 
 `composer req devgiants/filesystem-gpio`
 
-__Important : install `inotify-tools` package (named like this on Debian) in order to have proper event raising system__
+__Important : install `inotify-tools` package (named like this on Debian) in order to have proper filesystem event raising system__
 
 ## Usage
 
@@ -45,4 +46,5 @@ try {
 ```
 
 ## To come
+
 I2C, UART, SPI... And switch to Python to ensure lower level capabilities (especially for hig speed toggling)
