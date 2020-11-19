@@ -13,6 +13,7 @@ use Devgiants\FilesystemGPIO\Exception\BadLogicException;
 use Devgiants\FilesystemGPIO\Exception\ExportException;
 use Calcinai\Rubberneck\Observer;
 use Evenement\EventEmitterTrait;
+use Monolog\Logger;
 use React\EventLoop\LoopInterface;
 use ReactFilesystemMonitor\INotifyProcessMonitor;
 
@@ -23,7 +24,7 @@ abstract class GPIO implements GPIOInterface {
 	/**
 	 * Root filesystem to use for handling GPIO
 	 */
-	const ROOT_FILESYSTEM = '/sys/class/gpio/';
+	static public $rootFilesystem = '/sys/class/gpio/';
 
 	const EXPORT = 'export';
 
@@ -119,10 +120,10 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	abstract protected function setDirection(): void;
 
-	public function watch( LoopInterface $loop ) {
-		$observer = new Observer( $loop );
+	public function watch( LoopInterface $loop, Logger $logger) {
+		$observer = new Observer( $loop, $logger );
 		$observer->on( Observer::EVENT_MODIFY, [ $this, 'onEventDetect' ] );
-		$observer->watch( GPIO::ROOT_FILESYSTEM . GPIO::GPIO . "{$this->linuxNumber}/" . GPIO::VALUE );
+		$observer->watch( GPIO::$rootFilesystem . GPIO::GPIO . "{$this->linuxNumber}/" . GPIO::VALUE );
 	}
 
 	/**
@@ -139,7 +140,7 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	protected function setLogic( string $logic ): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::ACTIVE_LOW,
+			GPIO::$rootFilesystem . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::ACTIVE_LOW,
 			GPIO::ACTIVE_LOW === $logic ? 1 : 0
 		);
 	}
@@ -168,12 +169,12 @@ abstract class GPIO implements GPIOInterface {
 
 		// TODO review like PHPi
 		file_put_contents(
-			static::ROOT_FILESYSTEM . static::EXPORT,
+			static::$rootFilesystem . static::EXPORT,
 			"{$this->linuxNumber}"
 		);
 
 		// Check
-		if ( ! file_exists( static::ROOT_FILESYSTEM . static::GPIO . $this->linuxNumber ) ) {
+		if ( ! file_exists( static::$rootFilesystem . static::GPIO . $this->linuxNumber ) ) {
 			throw new ExportException( "Problem with export. GPIO {$this->linuxNumber} not found" );
 		}
 		$this->isExported = TRUE;
@@ -184,7 +185,7 @@ abstract class GPIO implements GPIOInterface {
 	 */
 	protected function unexport(): void {
 		file_put_contents(
-			static::ROOT_FILESYSTEM . static::UNEXPORT,
+			static::$rootFilesystem . static::UNEXPORT,
 			"{$this->linuxNumber}"
 		);
 	}

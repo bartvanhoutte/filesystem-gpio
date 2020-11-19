@@ -60,7 +60,7 @@ class GPO extends GPIO {
 	protected function export(): void {
 		parent::export();
 		// Open RW
-		$this->fileHandler = fopen( GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, 'r+' );
+		$this->fileHandler = fopen( GPIO::$rootFilesystem . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE, 'r+' );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class GPO extends GPIO {
 	 */
 	protected function setDirection(): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
+			GPIO::$rootFilesystem . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
 			Directions::OUT
 		);
 	}

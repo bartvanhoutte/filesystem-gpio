@@ -42,7 +42,7 @@ class GPI extends GPIO {
 	 */
 	protected function setDirection(): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
+			GPIO::$rootFilesystem . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::DIRECTION,
 			Directions::IN
 		);
 	}
@@ -52,7 +52,7 @@ class GPI extends GPIO {
 	 */
 	protected function setEdge(string $edge): void {
 		file_put_contents(
-			GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::EDGE,
+			GPIO::$rootFilesystem . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::EDGE,
 			$edge
 		);
 	}
@@ -61,7 +61,7 @@ class GPI extends GPIO {
 	 * @return int
 	 */
 	public function read() {
-		return ($this->value = (int)file_get_contents(GPIO::ROOT_FILESYSTEM . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE));
+		return ($this->value = (int)file_get_contents(GPIO::$rootFilesystem . GPIO::GPIO . $this->linuxNumber . '/' . GPIO::VALUE));
 	}
 
 	/**

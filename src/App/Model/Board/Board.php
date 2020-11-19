@@ -9,34 +9,43 @@
 namespace Devgiants\FilesystemGPIO\Model\Board;
 
 
+use Devgiants\FilesystemGPIO\Exception\BadLogicException;
+use Devgiants\FilesystemGPIO\Exception\ExportException;
 use Devgiants\FilesystemGPIO\Model\GPIO\GPI;
 use Devgiants\FilesystemGPIO\Model\GPIO\GPIO;
 use Devgiants\FilesystemGPIO\Model\GPIO\GPO;
 use Devgiants\FilesystemGPIO\Model\GPIO\Logic;
 use Calcinai\Rubberneck\Observer;
+use Monolog\Logger;
 use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
 
 class Board {
 
 	/**
 	 * @var array[GPIO]
 	 */
-	protected $gpios;
+	private $gpios;
 
 	/**
 	 * @var array[GPI]
 	 */
-	protected $gpis;
+	private $gpis;
 
 	/**
 	 * @var array[GPO]
 	 */
-	protected $gpos;
+	private $gpos;
 
 	/**
-	 * @var \React\EventLoop\LoopInterface
+	 * @var LoopInterface
 	 */
-	protected $loop;
+	private $loop;
+
+    /**
+     * @var Logger $logger
+     */
+	private $logger;
 
 	/**
 	 * Board constructor.
@@ -47,12 +56,14 @@ class Board {
 	}
 
 
-	/**
-	 * @return static
-	 */
-	public static function create(): Board {
+    /**
+     * @param Logger $logger
+     * @return static
+     */
+	public static function create(Logger $logger): Board {
 		$board       = new static();
 		$board->loop = Factory::create();
+		$board->logger = $logger;
 
 		return $board;
 	}
@@ -61,9 +72,9 @@ class Board {
 	 * @param int $linuxNumber
 	 * @param string $logic
 	 *
-	 * @return \Devgiants\FilesystemGPIO\Model\GPIO\GPI
-	 * @throws \Devgiants\FilesystemGPIO\Exception\BadLogicException
-	 * @throws \Devgiants\FilesystemGPIO\Exception\ExportException
+	 * @return GPI
+	 * @throws BadLogicException
+	 * @throws ExportException
 	 * @throws \ReflectionException
 	 */
 	public function registerGPI( int $linuxNumber, string $logic = Logic::ACTIVE_HIGH ) {
@@ -102,7 +113,7 @@ class Board {
 		$this->gpios[ $gpio->getLinuxNumber() ] = $gpio;
 
 		// Start watching
-		$gpio->watch($this->loop);
+		$gpio->watch($this->loop, $this->logger);
 	}
 
 	/**
